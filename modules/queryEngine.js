@@ -6,14 +6,11 @@ import { querySelectorAllDeep } from '@mariusandra/query-selector-shadow-dom'
  * @param {object} state. The current selector state (has the stack and specificity sum)
  */
 export function isUniqueElementID (query, elementID) {
-  // use selector to query an element and see if it is a one-to-one selection
-  var results = query(`[id="${elementID}"]`) || []
-  return results.length === 1
+  return isUniqueSelector(query, `[id="${elementID}"]`)
 }
 
-export function isUniqueDataAttr (query, dataAttr) {
-  // use selector to query an element and see if it is a one-to-one selection
-  var results = query(`[data-attr="${dataAttr}"]`) || []
+export function isUniqueSelector(query, selector) {
+  var results = query(selector) || []
   return results.length === 1
 }
 

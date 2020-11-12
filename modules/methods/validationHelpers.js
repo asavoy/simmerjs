@@ -13,6 +13,7 @@ export function tagName (tagName) {
   }
   return false
 }
+
 /**
  * Validate the syntax of an attribute to make sure that it has a valid syntax for the query engine.
  * @param {string} attribute. The element's attribute's value
@@ -23,6 +24,16 @@ export function attr (attribute) {
     attribute.match(/^[0-9a-zA-Z][a-zA-Z_\-:0-9.]*$/gi) !== null
   ) {
     return attribute
+  }
+  return false
+}
+
+export function validDataSelector(selector) {
+  if (
+    typeof selector === 'string' &&
+    selector.match(/^\[data-[0-9a-zA-Z_\-:.]+(='[0-9a-zA-Z_\-:.]*')?\]$/gi) !== null
+  ) {
+    return selector
   }
   return false
 }

@@ -22,6 +22,16 @@ const installSimmerOnWindow = windowScope => {
 const createWindow = (dom = '') =>
   installSimmerOnWindow(new JSDOM(`<body>${dom}</body>`).window)
 
+const testExpectSelector = (bodySelector, resultSelector) => {
+  const windowScope = createWindow(fixture)
+  var elements = compareElementsAndSimmer(windowScope, bodySelector)
+  expect(elements).not.toBe(undefined)
+  expect(elements.SimmerEl).not.toBe(undefined)
+  expect(elements.el).not.toBe(undefined)
+  expect(elements.el).toBe(elements.SimmerEl)
+  expect(elements.selector).toEqual(resultSelector)
+}
+
 test(`can analyze an element with an ID`, function () {
   const windowScope = createWindow(fixture)
   var elements = compareElementsAndSimmer(windowScope, '#BodyDiv')
@@ -290,13 +300,16 @@ test(`can analyze an element with a class that contains a colon`, function () {
 })
 
 test(`can analyze an element with data-attr`, function () {
-  const windowScope = createWindow(fixture)
-  var elements = compareElementsAndSimmer(windowScope, '#somestuff')
-  expect(elements).not.toBe(undefined)
-  expect(elements.SimmerEl).not.toBe(undefined)
-  expect(elements.el).not.toBe(undefined)
-  expect(elements.el).toBe(elements.SimmerEl)
-  expect(elements.selector).toEqual("[data-attr='blue']")
+  testExpectSelector('.data-attrs div:nth-child(1)', "[data-attr='blue']")
+})
+
+test(`can analyze an element with data attributes`, function () {
+  testExpectSelector('.data-attrs div:nth-child(2)', "[data-greek-letter='alpha']")
+})
+
+test(`can analyze an element with non-unique data attributes`, function () {
+  // :TODO: This is worse than could actually be generated
+  testExpectSelector('.data-attrs [data-test-attribute-foo] div', "[data-test-attribute-foo] > *")
 })
 
 test(`can't analyze an element which is longer than the selectorMaxLength chars`, function () {

@@ -60,7 +60,14 @@ export default `
           </div>
       </div>
       <div class="this-is:fine"></div>
-      <div id="somestuff" data-attr="blue"></div>
+      <div class="data-attrs">
+          <div data-attr="blue"></div>
+          <div data-greek-letter="alpha"></div>
+          <div data-greek-letter="omega"></div>
+          <div data-test-attribute-foo>
+              <div data-greek-letter="omega"></div>
+          </div>
+      </div>
       <div>
           <div>
               <div>
