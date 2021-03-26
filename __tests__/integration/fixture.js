@@ -60,8 +60,9 @@ export default `
           </div>
       </div>
       <div class="this-is:fine"></div>
-      <div id="somestuff" data-attr="blue"></div>
+      <div id="someStuff" data-attribute="blue"></div>
       <div id="moreStuff" data-stonk-id="tusk"></div>
+      <div id="evenMoreStuff" data-attr-empty></div>
       <div>
           <div>
               <div>

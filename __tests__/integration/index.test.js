@@ -14,7 +14,7 @@ const { JSDOM } = require('jsdom')
 const installSimmerOnWindow = windowScope => {
   exposeOnWindow(
     windowScope,
-    createSimmer(windowScope, { errorHandling: e => console.log(e), dataAttributes: ['data-attr', 'data-stonk-id'] })
+    createSimmer(windowScope, { errorHandling: e => console.log(e), dataAttributes: ['data-attr*', 'data-stonk-id'] })
   )
   return windowScope
 }
@@ -291,12 +291,12 @@ test(`can analyze an element with a class that contains a colon`, function () {
 
 test(`can analyze an element with data attributes`, function () {
   const windowScope = createWindow(fixture)
-  var elements = compareElementsAndSimmer(windowScope, '#somestuff')
+  var elements = compareElementsAndSimmer(windowScope, '#someStuff')
   expect(elements).not.toBe(undefined)
   expect(elements.SimmerEl).not.toBe(undefined)
   expect(elements.el).not.toBe(undefined)
   expect(elements.el).toBe(elements.SimmerEl)
-  expect(elements.selector).toEqual("[data-attr='blue']")
+  expect(elements.selector).toEqual("[data-attribute='blue']")
 })
 
 test(`can analyze multiple elements with data attributes`, function () {
@@ -307,6 +307,16 @@ test(`can analyze multiple elements with data attributes`, function () {
   expect(elements.el).not.toBe(undefined)
   expect(elements.el).toBe(elements.SimmerEl)
   expect(elements.selector).toEqual("[data-stonk-id='tusk']")
+})
+
+test(`can analyze multiple elements with empty data attribute`, function () {
+  const windowScope = createWindow(fixture)
+  var elements = compareElementsAndSimmer(windowScope, '#evenMoreStuff')
+  expect(elements).not.toBe(undefined)
+  expect(elements.SimmerEl).not.toBe(undefined)
+  expect(elements.el).not.toBe(undefined)
+  expect(elements.el).toBe(elements.SimmerEl)
+  expect(elements.selector).toEqual("[data-attr-empty]")
 })
 
 test(`can't analyze an element which is longer than the selectorMaxLength chars`, function () {

@@ -8,12 +8,33 @@ import { attr } from './validationHelpers'
 export default function (hierarchy, state, validateSelector, config, query) {
   return hierarchy.reduce((selectorState, currentElem, index) => {
     if (!selectorState.verified) {
-      const [validatedState] = config.dataAttributes
-        .map((key) => [key, currentElem.el.getAttribute(key)])
-        .filter(([key, value]) => attr(value))
+      const allAttributes = Array.from(currentElem.el.attributes)
+        .map((a) => a.name)
+        .filter((key) => key !== 'id' && key !== 'class')
+
+      const matchingAttributes = new Set()
+      for (const selector of config.dataAttributes) {
+        const regexp = selector
+          .replace(/[.+?^${}()|[\]\\]/g, '') // remove all regexp symbols
+          .replace(/\*/g, '.*') // except for '*', change that to '.*'
+
+        for (const attribute of allAttributes) {
+          if (new RegExp(`^${regexp}$`).test(attribute)) {
+            matchingAttributes.add(attribute)
+          }
+        }
+      }
+
+      const [validatedState] = Array.from(matchingAttributes)
+        .map((key) => {
+          return [key, currentElem.el.getAttribute(key)]
+        })
+        .filter(
+          ([key, value]) => attr(value) || (key.match(/^data-/) && !value) // data- can be empty
+        )
         .map(([key, value]) => {
           const isUnique = isUniqueDataAttr(query, key, value)
-          selectorState.stack[index].push(`[${key}='${value}']`)
+          selectorState.stack[index].push(value === '' ? `[${key}]` : `[${key}='${value}']`)
           selectorState.specificity += isUnique ? 100 : 50
 
           if (selectorState.specificity >= config.specificityThreshold) {
