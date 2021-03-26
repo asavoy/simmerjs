@@ -309,6 +309,16 @@ test(`can analyze multiple elements with data attributes`, function () {
   expect(elements.selector).toEqual("[data-stonk-id='tusk']")
 })
 
+test(`can analyze multiple elements with empty data attribute`, function () {
+  const windowScope = createWindow(fixture)
+  var elements = compareElementsAndSimmer(windowScope, '#evenMoreStuff')
+  expect(elements).not.toBe(undefined)
+  expect(elements.SimmerEl).not.toBe(undefined)
+  expect(elements.el).not.toBe(undefined)
+  expect(elements.el).toBe(elements.SimmerEl)
+  expect(elements.selector).toEqual("[data-attr-empty]")
+})
+
 test(`can't analyze an element which is longer than the selectorMaxLength chars`, function () {
   const windowScope = createWindow(fixture)
   const placeHolder = queryEngine(windowScope.document).query(

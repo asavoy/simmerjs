@@ -8,7 +8,9 @@ import { attr } from './validationHelpers'
 export default function (hierarchy, state, validateSelector, config, query) {
   return hierarchy.reduce((selectorState, currentElem, index) => {
     if (!selectorState.verified) {
-      const allAttributes = Array.from(currentElem.el.attributes).map((a) => a.name).filter(key => key !== 'id' && key !== 'class')
+      const allAttributes = Array.from(currentElem.el.attributes)
+        .map((a) => a.name)
+        .filter((key) => key !== 'id' && key !== 'class')
 
       const matchingAttributes = new Set()
       for (const selector of config.dataAttributes) {
@@ -27,10 +29,12 @@ export default function (hierarchy, state, validateSelector, config, query) {
         .map((key) => {
           return [key, currentElem.el.getAttribute(key)]
         })
-        .filter(([key, value]) => attr(value))
+        .filter(
+          ([key, value]) => attr(value) || (key.match(/^data-/) && !value) // data- can be empty
+        )
         .map(([key, value]) => {
           const isUnique = isUniqueDataAttr(query, key, value)
-          selectorState.stack[index].push(`[${key}='${value}']`)
+          selectorState.stack[index].push(value === '' ? `[${key}]` : `[${key}='${value}']`)
           selectorState.specificity += isUnique ? 100 : 50
 
           if (selectorState.specificity >= config.specificityThreshold) {
