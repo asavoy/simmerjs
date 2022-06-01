@@ -63,6 +63,7 @@ export default `
       <div id="someStuff" data-attribute="blue"></div>
       <div id="moreStuff" data-stonk-id="tusk"></div>
       <div id="evenMoreStuff" data-attr-empty></div>
+      <div data-attr="TestPage/clickable div"></div>
       <div>
           <div>
               <div>
