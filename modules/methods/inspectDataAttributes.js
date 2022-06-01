@@ -30,7 +30,7 @@ export default function (hierarchy, state, validateSelector, config, query) {
           return [key, currentElem.el.getAttribute(key)]
         })
         .filter(
-          ([key, value]) => attr(value) || (key.match(/^data-/) && !value) // data- can be empty
+          ([key, value]) => attr(value) || key.match(/^data-/) // data- can be empty
         )
         .map(([key, value]) => {
           const isUnique = isUniqueDataAttr(query, key, value)
